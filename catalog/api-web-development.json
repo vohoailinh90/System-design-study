@@ -1,0 +1,828 @@
+{
+ "chapter": "sd-01",
+ "title_vi": "API và phát triển web",
+ "source_repository": "ByteByteGoHq/system-design-101",
+ "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+ "topics": [
+  {
+   "id": "sd-01-001",
+   "title_source": "Short/long polling, SSE, WebSocket",
+   "source_path": "data/guides/shortlong-polling-sse-websocket.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "a0aaac9a25a364a6a1128be0f99caecfcabd68b0",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0337-short-long-polling-sse-websocket.jpeg"
+   ],
+   "batch": "pilot",
+   "title_plain": "Làm sao trình duyệt biết có tin mới?",
+   "analogy": "chờ shipper giao đồ ăn",
+   "terms": [
+    "polling",
+    "SSE",
+    "WebSocket"
+   ],
+   "facts": [
+    "Máy chủ không tự gõ cửa trình duyệt; trình duyệt là bên mở kết nối trước",
+    "Polling ngắn: cứ vài giây hỏi một lần, kể cả khi chưa có tin",
+    "Polling dài: máy chủ giữ câu hỏi đến khi có tin hoặc hết hạn, rồi hỏi tiếp",
+    "SSE: một chiều, máy chủ đẩy tin liên tục về trình duyệt",
+    "WebSocket: hai chiều, cả hai bên nói bất cứ lúc nào"
+   ],
+   "watch_out": "Nguồn nói SSE khiến trình duyệt không gửi được yêu cầu mới: chỉ đúng với chính luồng SSE; trình duyệt vẫn gửi được yêu cầu HTTP riêng."
+  },
+  {
+   "id": "sd-01-002",
+   "title_source": "Load Balancer Realistic Use Cases",
+   "source_path": "data/guides/load-balancer-realistic-use-cases-you-may-not-know.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "7c1a3c6e60a7c0adbbe2bbde4e3f55451b69138a",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0232-http-status-code-shouldnt-exist.png"
+   ],
+   "batch": "F1",
+   "title_plain": "Người điều phối giúp web không sập: 6 việc thực tế",
+   "analogy": "nhân viên điều phối ở nhà hàng đông khách",
+   "terms": [
+    "cân bằng tải",
+    "SSL",
+    "health check"
+   ],
+   "facts": [
+    "Xử lý lỗi: chuyển khách khỏi máy hỏng",
+    "Kiểm tra sức khỏe: chỉ gửi khách tới máy còn chạy tốt",
+    "Định tuyến theo thiết bị: điện thoại và máy tính có thể đi đường khác nhau",
+    "Giải mã SSL thay cho máy chủ để máy chủ nhẹ việc",
+    "Cân bằng giữa nhiều vùng; dính phiên: cùng một người luôn về cùng một máy"
+   ],
+   "watch_out": "Giải thích SSL là khóa bảo mật của kết nối an toàn (https), không đi sâu mật mã."
+  },
+  {
+   "id": "sd-01-003",
+   "title_source": "5 HTTP Status Codes That Should Never Have Been Created",
+   "source_path": "data/guides/5-http-status-codes-that-should-never-have-been-created.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "d63c0502ba9eef0ac71cd3f4bc926c995ebdc986",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0232-http-status-code-shouldnt-exist.png"
+   ],
+   "batch": "F1",
+   "title_plain": "5 \"mã lỗi web\" kỳ quặc có thật",
+   "analogy": "tem phiếu trả lời của bưu điện",
+   "terms": [
+    "HTTP",
+    "mã trạng thái",
+    "451",
+    "418"
+   ],
+   "facts": [
+    "451: bị chặn vì lý do pháp lý",
+    "418 Tôi là ấm trà: trò đùa Cá tháng Tư",
+    "420: cách cũ của Twitter báo gọi quá nhiều, nay dùng 429",
+    "530 và 218 là mã không chính thức của một số dịch vụ",
+    "Mã trạng thái là con số ngắn máy chủ trả lời trình duyệt"
+   ],
+   "watch_out": "Các mã 218, 420, 530 không thuộc chuẩn chính thức; nói rõ \"không chính thức\". 418 là đùa trong một tài liệu 1998."
+  },
+  {
+   "id": "sd-01-004",
+   "title_source": "How does gRPC work?",
+   "source_path": "data/guides/how-does-grpc-work.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "da39fb58d0a338dfb6eed07b9a6ce0afc4e11e1a",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0210-grpc.png"
+   ],
+   "batch": "F1",
+   "title_plain": "gRPC: các dịch vụ nói chuyện nhanh với nhau thế nào?",
+   "analogy": "hai bộ phận trong công ty trao đổi bằng mã viết tắt",
+   "terms": [
+    "gRPC",
+    "RPC",
+    "JSON",
+    "HTTP/2"
+   ],
+   "facts": [
+    "RPC: gọi hàm ở máy khác như gọi hàm tại chỗ",
+    "Dữ liệu được nén thành dạng nhị phân gọn hơn JSON",
+    "Chạy trên HTTP/2",
+    "Luồng: khách gọi → dịch vụ đơn hàng → dịch vụ thanh toán → trả kết quả ngược lại",
+    "Nguồn nói nhanh hơn JSON khoảng 5 lần: nói là \"có thể nhanh hơn nhiều, tùy trường hợp\""
+   ],
+   "watch_out": "Không khẳng định con số 5 lần như chắc chắn. Không viết mã."
+  },
+  {
+   "id": "sd-01-005",
+   "title_source": "How NAT Enabled the Internet",
+   "source_path": "data/guides/how-nat-made-the-growth-of-the-internet-possible.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "ee73767aa48a016ff32a1a8c93909ad792300042",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0231-http-header.png"
+   ],
+   "batch": "F1",
+   "title_plain": "NAT: vì sao cả nhà dùng chung một địa chỉ Internet?",
+   "analogy": "lễ tân tòa nhà nhận thư chung rồi chuyển đến từng phòng",
+   "terms": [
+    "NAT",
+    "IP",
+    "router",
+    "IPv4"
+   ],
+   "facts": [
+    "Nhiều thiết bị trong nhà dùng chung một địa chỉ công khai",
+    "Router đổi địa chỉ riêng thành địa chỉ công khai khi đi ra, đổi ngược khi nhận về",
+    "Tiết kiệm địa chỉ IPv4 vốn có hạn",
+    "Che địa chỉ nội bộ nên có tác dụng như tường lửa cơ bản"
+   ],
+   "watch_out": "NAT che địa chỉ nội bộ nhưng không thay thế tường lửa thật."
+  },
+  {
+   "id": "sd-01-006",
+   "title_source": "Important Things About HTTP Headers",
+   "source_path": "data/guides/important-things-about-http-headers-you-may-not-know.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "9000212d3bb0bb132f39a6f67725de6c679f176a",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0231-http-header.png"
+   ],
+   "batch": "F2",
+   "title_plain": "HTTP header: \"tem dán ngoài phong bì\" của mỗi yêu cầu web",
+   "analogy": "thông tin ghi ngoài phong bì thư",
+   "terms": [
+    "HTTP",
+    "header",
+    "request",
+    "response"
+   ],
+   "facts": [
+    "Yêu cầu và phản hồi là cặp hỏi–đáp",
+    "Header là thông tin thêm: bạn là ai, gửi loại dữ liệu gì",
+    "Header phản hồi cho biết kiểu dữ liệu nhận về hoặc chỉ dẫn đặc biệt",
+    "Cần hiểu header để hai bên hiểu đúng nhau"
+   ],
+   "watch_out": "Chỉ nêu ví dụ header dễ hiểu (như loại nội dung, ngôn ngữ), không liệt kê hàng loạt."
+  },
+  {
+   "id": "sd-01-007",
+   "title_source": "Internet Traffic Routing Policies",
+   "source_path": "data/guides/internet-traffic-routing-policies.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "ad8b1c2d58de19d1332e34c953992f4c333883fb",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0106-internet-traffic-routing-policies.png"
+   ],
+   "batch": "F2",
+   "title_plain": "DNS chỉ đường: 6 cách chia người dùng tới máy chủ",
+   "analogy": "tổng đài chỉ đường tới nhiều chi nhánh",
+   "terms": [
+    "DNS",
+    "failover",
+    "độ trễ",
+    "trọng số"
+   ],
+   "facts": [
+    "Simple: một điểm đến duy nhất",
+    "Failover: hỏng thì sang điểm dự phòng",
+    "Geolocation: theo vị trí người dùng",
+    "Latency: tới nơi phản hồi nhanh nhất",
+    "Multivalue: trả nhiều địa chỉ, không thay thế cân bằng tải",
+    "Weighted: chia theo tỷ lệ"
+   ],
+   "watch_out": "DNS là danh bạ đổi tên miền thành địa chỉ; nói rõ chính sách này do DNS thực hiện."
+  },
+  {
+   "id": "sd-01-008",
+   "title_source": "How Browsers Render Web Pages",
+   "source_path": "data/guides/how-does-the-browser-render-a-web-page.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "4ff1f63edf1e8f413830db135db893affac4baed",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0090-browser-render-page.jpg"
+   ],
+   "batch": "F2",
+   "title_plain": "Trình duyệt biến mã thành trang web trước mắt bạn thế nào?",
+   "analogy": "thợ xây dựng nhà từ bản vẽ",
+   "terms": [
+    "HTML",
+    "CSS",
+    "DOM",
+    "GPU"
+   ],
+   "facts": [
+    "Đọc HTML dựng cây DOM",
+    "Đọc CSS dựng cây CSSOM",
+    "Gộp hai cây thành cây hiển thị, bỏ phần ẩn",
+    "Layout: tính vị trí và kích thước",
+    "Paint rồi hiển thị lên màn hình"
+   ],
+   "watch_out": "Mỗi bước giải thích bằng một hình ảnh đời thường, không dùng thuật ngữ trần."
+  },
+  {
+   "id": "sd-01-009",
+   "title_source": "What makes HTTP2 faster than HTTP1?",
+   "source_path": "data/guides/what-makes-http2-faster-than-http1.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "2271f5ae0b26a8df24bc792417c03074928cfde4",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0421-why-http2-is-faster-than-http1.png"
+   ],
+   "batch": "F2",
+   "title_plain": "HTTP/2 nhanh hơn HTTP/1 nhờ đâu?",
+   "analogy": "đường một làn đổi thành nhiều làn",
+   "terms": [
+    "HTTP/2",
+    "multiplexing",
+    "HPACK",
+    "frame"
+   ],
+   "facts": [
+    "Chia dữ liệu thành các mảnh nhỏ (frame) dạng nhị phân",
+    "Multiplexing: nhiều yêu cầu chạy xen kẽ trên một kết nối",
+    "Ưu tiên luồng quan trọng trước",
+    "Server push: gửi trước tài nguyên, thực tế ít được dùng và nhiều trình duyệt đã bỏ hỗ trợ",
+    "HPACK nén header"
+   ],
+   "watch_out": "Nguồn tự nhắc HTTP/2 vẫn có thể chậm tùy tình huống; giữ lời nhắc đó."
+  },
+  {
+   "id": "sd-01-010",
+   "title_source": "What is CSS (Cascading Style Sheets)?",
+   "source_path": "data/guides/what-is-css-cascading-style-sheets.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "b9d6e76f4a7a6b3468f80aecd6b38d241e29e1e3",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0408-what-is-css-cascading-style-sheets.png"
+   ],
+   "batch": "F3",
+   "title_plain": "CSS: lớp \"trang điểm\" cho trang web",
+   "analogy": "tủ quần áo tách biệt với cơ thể",
+   "terms": [
+    "CSS",
+    "HTML",
+    "Flexbox",
+    "Grid"
+   ],
+   "facts": [
+    "HTML là nội dung, CSS là hình thức",
+    "Quy tắc gồm bộ chọn và thuộc tính (màu, cỡ chữ, vị trí)",
+    "Cascading: quy tắc xung đột thì quy tắc có trọng số cao hơn thắng",
+    "Flexbox và Grid giúp bố cục hiện đại, tương thích nhiều màn hình"
+   ],
+   "watch_out": "Không đưa mã. Mô tả bằng lời \"đổi màu tất cả đoạn văn sang xanh\"."
+  },
+  {
+   "id": "sd-01-011",
+   "title_source": "Key Use Cases for Load Balancers",
+   "source_path": "data/guides/key-use-cases-for-load-balancers.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "5610ac7e7118e48ed0e71c9b5aa224ffe09521ab",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0046-top-6-load-balancer-use-cases.png"
+   ],
+   "batch": "F3",
+   "title_plain": "6 công dụng chính của cân bằng tải",
+   "analogy": "người chia khách ở bàn tiếp tân",
+   "terms": [
+    "cân bằng tải",
+    "server",
+    "scalability",
+    "SSL"
+   ],
+   "facts": [
+    "Chia đều lưu lượng",
+    "Sẵn sàng cao: máy hỏng thì chuyển sang máy tốt",
+    "Giải mã SSL hộ",
+    "Giữ phiên: cùng người dùng về cùng máy",
+    "Dễ mở rộng: thêm máy là xong",
+    "Theo dõi sức khỏe và loại máy lỗi"
+   ],
+   "watch_out": "Bài này trùng nhiều ý với sd-01-002: viết bằng ví dụ khác, nhấn mạnh \"mở rộng\" và \"sẵn sàng cao\"."
+  },
+  {
+   "id": "sd-01-012",
+   "title_source": "18 Common Ports Worth Knowing",
+   "source_path": "data/guides/18-common-ports-worth-knowing.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "70619157d286e9709be0cbf23f23e4de37c7d40c",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0030-18-common-ports-you-must-know.png"
+   ],
+   "batch": "F3",
+   "title_plain": "18 \"cổng\" mạng phổ biến, như số phòng trong tòa nhà",
+   "analogy": "số phòng trong một tòa nhà",
+   "terms": [
+    "port",
+    "TCP",
+    "UDP",
+    "HTTPS"
+   ],
+   "facts": [
+    "Địa chỉ IP là địa chỉ tòa nhà, cổng là số phòng",
+    "HTTP dùng 80, HTTPS 443",
+    "SSH 22, DNS 53",
+    "Email: SMTP 25, POP3 110, IMAP 143",
+    "Cơ sở dữ liệu: MySQL 3306, PostgreSQL 5432",
+    "RDP 3389"
+   ],
+   "watch_out": "Chỉ chọn khoảng 6–8 cổng quen thuộc để giải thích kỹ, phần còn lại gom bảng ngắn. Số cổng phải đúng như nguồn."
+  },
+  {
+   "id": "sd-01-013",
+   "title_source": "What are the differences between WAN, LAN, PAN and MAN?",
+   "source_path": "data/guides/what-are-the-differences-between-wan-lan-pan-and-man.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "f2c0bc5d8efa3cc7407d0ad2b24dbe60b162960d",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0405-wan-lan-pan-man-explained.png"
+   ],
+   "batch": "F3",
+   "title_plain": "PAN, LAN, MAN, WAN: mạng nhỏ đến mạng toàn cầu",
+   "analogy": "từ bàn làm việc đến cả thành phố và cả nước",
+   "terms": [
+    "PAN",
+    "LAN",
+    "MAN",
+    "WAN"
+   ],
+   "facts": [
+    "PAN: quanh một người, vài mét, ví dụ điện thoại và tai nghe Bluetooth",
+    "LAN: trong nhà, văn phòng, tòa nhà",
+    "MAN: cỡ một thành phố",
+    "WAN: cỡ quốc gia, lục địa; Internet là mạng WAN lớn nhất"
+   ],
+   "watch_out": "Dùng ví dụ quen thuộc; mỗi loại một ví dụ đời thường."
+  },
+  {
+   "id": "sd-01-014",
+   "title_source": "How does Javascript Work?",
+   "source_path": "data/guides/how-does-javascript-work.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "f3249fd95b8fda5acf1571cd35c760c23408a7da",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0241-javascript-js-explained.png"
+   ],
+   "batch": "F4",
+   "title_plain": "JavaScript hoạt động thế nào trong trình duyệt?",
+   "analogy": "người phiên dịch đọc đến đâu nói đến đó",
+   "terms": [
+    "JavaScript",
+    "trình duyệt",
+    "bất đồng bộ",
+    "callback"
+   ],
+   "facts": [
+    "JavaScript được trình duyệt đọc và chạy trực tiếp, hiện đại có biên dịch ngay khi chạy (JIT)",
+    "Hàm là \"công dân hạng nhất\": gán, truyền, trả về như dữ liệu",
+    "Kiểu dữ liệu linh hoạt, chưa cần khai báo trước",
+    "Bất đồng bộ: việc chờ lâu chạy nền, xong thì báo",
+    "Tự dọn bộ nhớ"
+   ],
+   "watch_out": "Nguồn gắn nhãn \"client-side\" cho ý bất đồng bộ: đừng lặp lại nhầm lẫn đó; JavaScript cũng chạy ở máy chủ (Node.js)."
+  },
+  {
+   "id": "sd-01-015",
+   "title_source": "8 Tips for Efficient API Design",
+   "source_path": "data/guides/8-tips-for-efficient-api-design.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "96a8ec7a3dbb4adec04dba3087838e34de5a05b0",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0385-top-8-tips-for-restful-api-design.png"
+   ],
+   "batch": "F4",
+   "title_plain": "8 mẹo để thiết kế API gọn gàng, dễ dùng",
+   "analogy": "thực đơn nhà hàng rõ ràng",
+   "terms": [
+    "API",
+    "idempotence",
+    "phiên bản",
+    "phân trang"
+   ],
+   "facts": [
+    "Đặt đường dẫn theo mô hình nghiệp vụ",
+    "Chọn đúng phương thức HTTP, dùng ít mã trạng thái",
+    "Idempotence: gọi lặp lại không gây hậu quả kép",
+    "Đánh số phiên bản từ đầu",
+    "Đường dẫn dễ hiểu; thao tác hàng loạt dùng chữ batch ở cuối đường dẫn",
+    "Quy tắc truy vấn: phân trang, sắp xếp, lọc"
+   ],
+   "watch_out": "API = \"thực đơn + cửa sổ gọi món\" giữa hai phần mềm. Giải thích idempotence bằng nút thang máy."
+  },
+  {
+   "id": "sd-01-016",
+   "title_source": "Reverse Proxy vs. API Gateway vs. Load Balancer",
+   "source_path": "data/guides/reverse-proxy-vs-api-gateway-vs-load-balancer.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "be4677ba88ada869f71cf4f41b9d2d4118ffee30",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0320-reverse-gateway-lb.png"
+   ],
+   "batch": "F4",
+   "title_plain": "Reverse proxy, API gateway, cân bằng tải: khác nhau ở đâu?",
+   "analogy": "bảo vệ, người đưa thư và cảnh sát giao thông",
+   "terms": [
+    "reverse proxy",
+    "API gateway",
+    "cân bằng tải",
+    "server"
+   ],
+   "facts": [
+    "Reverse proxy: đứng trước, giấu máy chủ thật",
+    "API gateway: nhận yêu cầu và chuyển đúng dịch vụ",
+    "Cân bằng tải: chia lưu lượng đều giữa các máy",
+    "Có thể dùng cả ba cùng nhau"
+   ],
+   "watch_out": "Ba tên gọi chồng lấn thực tế; nói rõ đây là cách phân biệt vai trò chính."
+  },
+  {
+   "id": "sd-01-017",
+   "title_source": "How does REST API work?",
+   "source_path": "data/guides/how-does-rest-api-work.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "fcee2a827d5d79d60466db0a224d7b1e79380748",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0317-rest-api-authentication-methods.png",
+    "https://assets.bytebytego.com/diagrams/0317-rest-api-authentication-methods.png"
+   ],
+   "batch": "F4",
+   "title_plain": "REST API: quy ước chung để các phần mềm gọi nhau",
+   "analogy": "quy tắc gọi món chung cho mọi nhà hàng",
+   "terms": [
+    "REST",
+    "API",
+    "JSON",
+    "HTTP"
+   ],
+   "facts": [
+    "REST là một phong cách thiết kế API dựa trên HTTP",
+    "Mỗi thứ (người dùng, đơn hàng) là một tài nguyên có địa chỉ riêng",
+    "Dùng các phương thức GET, POST, PUT, DELETE",
+    "Không nhớ trạng thái: mỗi yêu cầu tự mang đủ thông tin",
+    "Dữ liệu thường ở dạng JSON"
+   ],
+   "watch_out": "Nguồn chỉ có hai hình và vài chữ: dựa vào hình gốc và kiến thức chuẩn, không bịa chi tiết hình."
+  },
+  {
+   "id": "sd-01-018",
+   "title_source": "Load Balancer vs. API Gateway",
+   "source_path": "data/guides/what-are-the-differences-between-a-load-balancer-and-an-api-gateway.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "755a17e403c9ecf75c5eec826e1922d40c408c40",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0252-lb-api-gateway.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-019",
+   "title_source": "How GraphQL Works at LinkedIn",
+   "source_path": "data/guides/how-does-graphql-work-in-the-real-world.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "7c797467c26a0cddf718069ad98ba332dcac55b9",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0209-graphql-linkedin.jpeg"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-020",
+   "title_source": "GraphQL Adoption Patterns",
+   "source_path": "data/guides/graphql-adoption-patterns.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "c6f5bf3b052d704e2f4b0395d3594fe6c6f9429d",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0208-graphql-adoption-patterns.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-021",
+   "title_source": "A cheat sheet for API designs",
+   "source_path": "data/guides/a-cheat-sheet-for-api-designs.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "1e51e00a07bdb56e2ab1772d618f234aab41207b",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0137-cheat-sheet-for-api-design.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-022",
+   "title_source": "API Gateway 101",
+   "source_path": "data/guides/api-gateway-101.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "2eb6b08ce0d1643a4e376575c13aaa0bf8c4bf77",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0074-api-gateway-101.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-023",
+   "title_source": "Top 3 API Gateway Use Cases",
+   "source_path": "data/guides/top-3-api-gateway-use-cases.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "3bcbf0ec7758d76d1c32991d38bf2dbda2dc97ff",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0073-top-3-api-gateway-use-cases.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-024",
+   "title_source": "What do version numbers mean?",
+   "source_path": "data/guides/what-do-version-numbers-mean.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "0a598471f15722278ba9cd4e499b41a0312d12d1",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0415-what-do-version-numbers-mean.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-025",
+   "title_source": "Do you know all the components of a URL?",
+   "source_path": "data/guides/do-you-know-all-the-components-of-a-url.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "ef790d94e564b33ea7966995cd9d6c4d009c4858",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0116-structure-of-url.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-026",
+   "title_source": "Unicast vs Broadcast vs Multicast vs Anycast",
+   "source_path": "data/guides/unicast-vs-broadcast-vs-multicast-vs-anycast.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "7b1649e92b4a69eb090c8e74a21fddcdacf62c33",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0125-unicast-vs-broadcast-vs-multicast-vs-anycast.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-027",
+   "title_source": "10 Essential Components of a Production Web Application",
+   "source_path": "data/guides/10-essential-components-of-a-production-web-application.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "0e1c06752bda7d1ef720d0b38431ed67003aa612",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0395-typical-architecture-of-a-web-application.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-028",
+   "title_source": "URL, URI, URN - Differences Explained",
+   "source_path": "data/guides/url-uri-urn-do-you-know-the-differences.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "ecb85139596c6884b0de4d4ce9e03576d0dd45ab",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0401-url-uri-urn.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-029",
+   "title_source": "API vs SDK",
+   "source_path": "data/guides/api-vs-sdk.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "8189347ed06bb008dae7ee2f6f8c9a69c4173b1f",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0071-api-vs-sdk.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-030",
+   "title_source": "A Cheatsheet to Build Secure APIs",
+   "source_path": "data/guides/a-cheatsheet-to-build-secure-apis.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "456be8c1c8bb73c4429c48318823ede8c3d14273",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0064-a-cheatsheet-to-build-secure-apis.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-031",
+   "title_source": "HTTP Status Codes You Should Know",
+   "source_path": "data/guides/http-status-code-you-should-know.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "965b2161782b277d799b4f6b9df92f994094aaaa",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0233-http-status-code.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-032",
+   "title_source": "SOAP vs REST vs GraphQL vs RPC",
+   "source_path": "data/guides/soap-vs-rest-vs-graphql-vs-rpc.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "b9cdeaf630e44853452f3bcca19fdcf3153966f5",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0126-api-style-compare.jpg"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-033",
+   "title_source": "A Cheatsheet on Comparing API Architectural Styles",
+   "source_path": "data/guides/a-cheatsheet-on-comparing-api-architectural-styles.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "0877a94ff2bf18e5626cd824d325f5eb6c2e5efd",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0092-cheatsheet-on-comparing-api-architectural-styles.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-034",
+   "title_source": "Top 9 HTTP Request Methods",
+   "source_path": "data/guides/top-9-http-request-methods.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "9b70e9f00015ac67d098e43ab4abc8eb616fd516",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0371-top-9-http-request-methods.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-035",
+   "title_source": "What is a Load Balancer?",
+   "source_path": "data/guides/what-is-a-load-balancer.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "98268f5cc7dfaa6040a2f1a5e58e0fd337479f97",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0261-what-is-a-load-balancer.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-036",
+   "title_source": "Proxy vs Reverse Proxy",
+   "source_path": "data/guides/proxy-vs-reverse-proxy.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "f25a285655e694ccfc403a6173ac4d77b47d3076",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0196-forward-proxy-vs-reverse-proxy.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-037",
+   "title_source": "HTTP/1 -> HTTP/2 -> HTTP/3",
+   "source_path": "data/guides/http1-http2-http3.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "ffa9adcf029fa16a3cc9de2497555ebb67e1546c",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0101-http-1-http-2-http-3.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-038",
+   "title_source": "Polling vs Webhooks",
+   "source_path": "data/guides/polling-vs-webhooks.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "7074f338fbcfa2c27e1f7bd365c2a761746b6853",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0057-pooling-vs-webhook.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-039",
+   "title_source": "How do we Perform Pagination in API Design?",
+   "source_path": "data/guides/how-do-we-perform-pagination-in-api-design.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "3806b02792a7b40aa17dde4950f79e52fc9b2783",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0076-api-pagination-101.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-040",
+   "title_source": "How to Design Effective and Safe APIs",
+   "source_path": "data/guides/how-do-we-design-effective-and-safe-apis.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "3280da5aee38918188b6921ca16cfd11ba6f8bd4",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0180-effective-apis.jpeg"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-041",
+   "title_source": "How to Design Secure Web API Access",
+   "source_path": "data/guides/how-to-design-secure-web-api-access-for-your-website.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "29a98ae116a5b79b349432305d6001109a8b9dd6",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0325-secure-api.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-042",
+   "title_source": "What Does an API Gateway Do?",
+   "source_path": "data/guides/what-does-api-gateway-do.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "e96f8daaacaf2b18e4f83c09b144b527171b5e33",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0072-what-does-api-gateway-do.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-043",
+   "title_source": "What is gRPC?",
+   "source_path": "data/guides/what-is-grpc.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "5cf07b5496aa8b4fab09c6d649de7c36dc1a3b17",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0054-what-is-grpc.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-044",
+   "title_source": "Top 12 Tips for API Security",
+   "source_path": "data/guides/top-12-tips-for-api-security.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "307dda0a9398ff1a4f8fc87855c6c3fd9cafbd8d",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0027-12-tips-for-api-security.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-045",
+   "title_source": "Explaining 9 Types of API Testing",
+   "source_path": "data/guides/explaining-9-types-of-api-testing.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "dfb763005e5240e76e7309efb8df1dd4f750f486",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0017-9-types-of-api-testing.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-046",
+   "title_source": "REST API vs. GraphQL",
+   "source_path": "data/guides/rest-api-vs-graphql.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "bd207f193c784b12bbc77a261c6705f273e75297",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0036-rest-vs-graphql.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-047",
+   "title_source": "What is GraphQL?",
+   "source_path": "data/guides/what-is-graphql.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "14c0962683bced23d6a410d8835477356edc42f9",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0055-what-is-graphql.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-048",
+   "title_source": "REST API Cheatsheet",
+   "source_path": "data/guides/rest-api-cheatsheet.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "0a19ca2c89ecbc36d28a8435d8e49f2107ad0502",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0040-rest-api-cheatsheet.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-049",
+   "title_source": "The Ultimate API Learning Roadmap",
+   "source_path": "data/guides/the-ultimate-api-learning-roadmap.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "578d2f7d519e4f9ee3a09119676a4653ba54ffb6",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0361-the-ultimate-api-learning-roadmap.png"
+   ],
+   "batch": null
+  },
+  {
+   "id": "sd-01-050",
+   "title_source": "The Evolving Landscape of API Protocols in 2023",
+   "source_path": "data/guides/the-evolving-landscape-of-api-protocols-in-2023.md",
+   "source_commit": "b28380a4710c5ec9638ec037d4168e288f334cba",
+   "source_blob_sha": "12f5a34b14d4595e3fac0a57387e13952b11f31b",
+   "image_urls": [
+    "https://assets.bytebytego.com/diagrams/0077-api-protocols.png"
+   ],
+   "batch": null
+  }
+ ]
+}
